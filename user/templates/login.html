@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" style="display: flex;justify-content: center;">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogIn</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+
+  
+    .container-fluid{
+        margin-top: 50px;
+        margin-bottom: 0px;
+        padding-top: 20px;
+    }
+    body{
+        /* background-color: #6610f2; */
+        background-color: aliceblue;
+        padding-top: 20px;
+    }
+    
+    .signin_form{
+        margin: 50px 20px;
+        box-shadow: #ffff;
+        border: #0000;
+        background-color: #ffff;
+        padding: 20px;
+        border-radius: 20px;
+        text-align: center;
+        margin-left: 380px;
+        margin-right: 400px 
+        }
+    .mb-3 .form-control{
+        border-radius: 20px;
+        text-align: center;
+    }
+    .button{
+            background-color:#1589FF;
+            width: 100%;
+            border-radius: 20px;
+            height: 34px;
+            
+
+    }
+    .register-link {
+            text-align: center;
+            font-size: medium;
+            margin-top: 1rem;
+            margin-left: 1rem;
+            
+        }
+
+    /* background-color: rgb(187,187,245); */
+
+    </style>
+    {% load static%}
+</head>
+<body >
+
+
+
+    <section class="container">
+        <form class = "signin_form container-fluid col-lg-4 col-md-8 col-12" id="formLogin" method="POST">
+            <img src="/static/images/logo.png" width="90" height="90" style="border-radius: 50px;"/>
+            {% csrf_token %}
+            {% load static %}
+            <script src="{% static 'SignIn.js' %}"></script>
+        
+            <h3>Login</h3>
+            <hr>
+            <div class="mb-3">
+
+              <input type="email" id="EmailId" name="EmailId" class="form-control" aria-describedby="emailHelp" placeholder="Enter your Email-Id">
+
+            </div>
+            <div class="mb-3">
+
+              <input type="password" id="Password" Name="Password" class="form-control" placeholder="Enter Password">
+            </div>
+            <button class="button" type="submit" class="btn btn-primary">Login</button>
+
+                <div class="register-link">
+                <p>Don't have an account? <a href="/register">Register here</a></p>
+            </div>
+          </form>
+          
+    </section>
+    <script>
+       function userSignIn(){
+	//debugger;
+	var EmailId = document.getElementById('EmailId').value;
+	console.log(EmailId);
+	var Password = document.getElementById('Password').value;
+	console.log(Password);
+	
+	if(EmailId == ""){
+		console.log("1");
+		alert("Enter the valid EmailId");
+		
+	}
+	else if(Password == ""){
+		console.log("2");
+		alert("please enter the password");
+	}
+	else {
+		console.log("3")
+		var signInParams = {
+			"email" : EmailId,
+			"password" : Password
+		};
+		var signInURL =  "http://127.0.0.1:8080/";
+		console.log(signInURL);
+		console.log(signInParams);
+		$.ajax({
+			method : "POST",
+			url: signInURL, 
+			data:JSON.stringify(signInParams),
+			contentType:"application/json",
+			dataType : 'json',
+			success :
+				    function (data, response) {// success callback function
+                        alert(data);
+				    console.log("This is data");
+				    console.log(data);
+				    console.log("This is response");
+				    console.log(response);
+				  //  if(data.responseText == "Login Successful"){
+					
+					alert("Logged In Successful");
+					dataparameter = data;
+					console.log(data)
+					console.log("this is data parameter");
+					console.log(dataparameter);
+					localStorage.setItem("Name",dataparameter.name);
+					localStorage.setItem("Name",dataparameter.name);
+					localStorage.setItem("Location", dataparameter.location);
+					localStorage.setItem("Friendscount",dataparameter.friendscount);
+				    window.location = "franzoohomepage";
+			},	            	
+			error : function (data, response) {// success callback function
+            //alert(JSON.stringify(data)+" -> "+status);
+            console.log("5");
+            console.log("This is data");
+				    console.log(data);
+				   // console.log("This is response");
+				    console.log(response);
+            	    console.log("Response-->", response);
+           
+				alert("wrong credentials");
+				window.location = "sign_in";
+
+
+    			
+	 }
+		});
+	}
+}
+   </script>
+    
+</body>
+</html>
+
